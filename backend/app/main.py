@@ -8,8 +8,8 @@ settings = get_settings()
 
 app = FastAPI(
     title=settings.app_name,
-    description="Local API foundation for the CitDet research prototype.",
-    version="0.1.0",
+    description="YOLO11s image inference API for the CitDet research prototype.",
+    version="0.2.0",
 )
 
 app.add_middleware(
@@ -21,4 +21,3 @@ app.add_middleware(
 )
 
 app.include_router(api_router, prefix="/api")
-
