@@ -8,7 +8,7 @@ settings = get_settings()
 
 app = FastAPI(
     title=settings.app_name,
-    description="YOLO11s image inference API for the CitDet research prototype.",
+    description="YOLO11s image inference API for the KalisCitrus research prototype.",
     version="0.2.0",
 )
 

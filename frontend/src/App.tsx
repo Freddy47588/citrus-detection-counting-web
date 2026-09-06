@@ -64,9 +64,9 @@ function App() {
     <div className="min-h-screen bg-canvas text-ink">
       <header className="border-b border-ink/10 bg-canvas/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-8">
-          <a href="#" className="flex items-center gap-3" aria-label="CitDet home">
+          <a href="#" className="flex items-center gap-3" aria-label="KalisCitrus home">
             <span className="grid h-10 w-10 place-items-center rounded-xl bg-ink text-white shadow-sm"><ScanLine size={21} aria-hidden="true" /></span>
-            <span className="text-xl font-bold tracking-tight">CitDet</span>
+            <span className="text-xl font-bold tracking-tight">KalisCitrus</span>
           </a>
           <div className="flex items-center gap-2 rounded-full border border-leaf/20 bg-white px-3 py-1.5 text-xs font-semibold text-leaf">
             <span className={`h-2 w-2 rounded-full ${yoloAvailable ? "bg-citrus" : "bg-ink/25"}`} />
@@ -82,7 +82,7 @@ function App() {
             <div className="max-w-3xl">
               <div className="mb-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-leaf"><Activity size={15} aria-hidden="true" /> Computer Vision Research</div>
               <h1 className="text-4xl font-semibold leading-[1.05] tracking-[-0.04em] sm:text-6xl">Citrus Detection <span className="text-citrus">&amp;</span> Counting</h1>
-              <p className="mt-5 max-w-2xl text-lg leading-8 text-ink/65">YOLO11s image inference prototype</p>
+              <p className="mt-5 max-w-2xl text-lg leading-8 text-ink/65">YOLO11s × D-FINE-S Research Prototype</p>
             </div>
           </div>
         </section>
@@ -144,13 +144,13 @@ function App() {
         <section className="border-y border-ink/10 bg-white">
           <div className="mx-auto grid max-w-7xl gap-8 px-5 py-14 sm:px-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
             <div><p className="eyebrow">Research Demo</p><h2 className="mt-2 text-3xl font-semibold tracking-[-0.03em]">A focused inference visualizer</h2></div>
-            <p className="leading-7 text-ink/65">CitDet visualizes object-detection inference on citrus imagery. Official Precision, Recall, F1, mAP, MAE, and RMSE evaluation remains in a separate controlled research pipeline.</p>
+            <p className="leading-7 text-ink/65">KalisCitrus visualizes object-detection inference on citrus imagery. Official Precision, Recall, F1, mAP, MAE, and RMSE evaluation remains in a separate controlled research pipeline.</p>
           </div>
         </section>
       </main>
 
       <footer className="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-8 text-xs text-ink/50 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-        <span>CitDet · Citrus Detection &amp; Counting</span>
+        <span>KalisCitrus — Citrus Detection &amp; Counting</span>
         <span className="flex items-center gap-2"><GitCompareArrows size={14} /> YOLO11s available · D-FINE-S planned</span>
       </footer>
     </div>

@@ -1,2 +1,1 @@
-"""API routes for CitDet."""
-
+"""API routes for KalisCitrus."""

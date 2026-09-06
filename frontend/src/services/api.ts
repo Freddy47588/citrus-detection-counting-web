@@ -30,7 +30,7 @@ async function request(input: string, init?: RequestInit): Promise<Response> {
     if (error instanceof DOMException && error.name === "AbortError") {
       throw new ApiError("The inference request timed out. Please try again.");
     }
-    throw new ApiError("Cannot reach the CitDet API. Make sure the backend is running.");
+    throw new ApiError("Cannot reach the KalisCitrus API. Make sure the backend is running.");
   } finally {
     window.clearTimeout(timeout);
   }

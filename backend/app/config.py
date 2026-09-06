@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    app_name: str = "CitDet API"
+    app_name: str = "KalisCitrus API"
     app_env: str = "development"
     api_host: str = "127.0.0.1"
     api_port: int = 8000
@@ -22,4 +22,3 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
-

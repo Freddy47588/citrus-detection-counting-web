@@ -1,4 +1,6 @@
-# CitDet — Citrus Detection & Counting
+# KalisCitrus — Citrus Detection & Counting
+
+> YOLO11s × D-FINE-S Research Prototype
 
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.116-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
@@ -11,11 +13,11 @@
 
 ## 🍊 Project Overview
 
-CitDet is a local-first research prototype for detecting and estimating citrus fruit counts in field images. It provides an end-to-end YOLO11s workflow: upload a JPEG or PNG image, run FastAPI inference, receive structured detection JSON, and visualize responsive bounding boxes and category counts in React.
+KalisCitrus is a local-first research prototype for detecting and estimating citrus fruit counts in field images. It provides an end-to-end YOLO11s workflow: upload a JPEG or PNG image, run FastAPI inference, receive structured detection JSON, and visualize responsive bounding boxes and category counts in React.
 
 ## 🔬 Research Context
 
-CitDet supports the study **“Performance Comparison of YOLO11s and D-FINE-S Models for Citrus Fruit Detection and Counting in Kalisongo Village.”** The current website is a deployment/demo prototype for inference only.
+KalisCitrus supports the study **“Performance Comparison of YOLO11s and D-FINE-S Models for Citrus Fruit Detection and Counting in Kalisongo Village.”** The current website is a deployment/demo prototype for inference only.
 
 Official Precision, Recall, F1, mAP, MAE, and RMSE results come from a separate controlled evaluation pipeline. This application does not calculate or alter research metrics, datasets, or model weights.
 
@@ -185,7 +187,7 @@ Coordinates refer to the EXIF-oriented original image dimensions, not the intern
 
 ## ⚠️ Research Disclaimer
 
-Estimated counts are model predictions, not guaranteed ground-truth measurements. CitDet is a research prototype and must not replace the separate official evaluation pipeline.
+Estimated counts are model predictions, not guaranteed ground-truth measurements. KalisCitrus is a research prototype and must not replace the separate official evaluation pipeline.
 
 ## License
 

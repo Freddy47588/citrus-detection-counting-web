@@ -1,2 +1,1 @@
-"""CitDet API package."""
-
+"""KalisCitrus API package."""
