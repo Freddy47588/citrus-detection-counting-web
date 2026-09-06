@@ -62,7 +62,7 @@ export function ImageUpload({ imageUrl, disabled = false, onImageChange }: Image
         >
           <span className="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-orange-100 text-citrus"><ImagePlus size={23} /></span>
           <p className="mt-4 text-sm font-semibold">Drag and drop an image here</p>
-          <p className="mt-1 text-xs text-ink/50">JPG, JPEG, or PNG · max 15 MB</p>
+          <p className="mt-1 text-xs text-ink/60">JPG, JPEG, or PNG · max 15 MB</p>
           <button type="button" disabled={disabled} onClick={() => inputRef.current?.click()} className="mt-5 inline-flex items-center gap-2 rounded-lg border border-ink/15 bg-white px-4 py-2.5 text-sm font-bold shadow-sm transition hover:border-citrus/50 hover:text-citrus disabled:cursor-not-allowed disabled:opacity-60">
             <FileImage size={16} /> Browse file
           </button>

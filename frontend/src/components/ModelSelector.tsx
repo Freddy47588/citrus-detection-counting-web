@@ -28,7 +28,7 @@ export function ModelSelector({ value, yoloAvailable, disabled = false, onChange
               <span className={`h-2.5 w-2.5 rounded-full border ${value === model.id ? "border-citrus bg-citrus" : "border-ink/25"}`} />
             </span>
             <span className="block text-sm font-bold">{model.name}</span>
-            <span className="mt-0.5 block text-[11px] text-ink/45">
+            <span className="mt-0.5 block text-[12px] leading-5 text-ink/60">
               {model.detail} · {model.id === "yolo11s" && yoloAvailable ? "available" : "not available"}
             </span>
           </label>

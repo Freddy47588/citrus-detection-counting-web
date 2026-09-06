@@ -21,12 +21,12 @@ export function ResultsPanel({ imageUrl, result, requestState }: ResultsPanelPro
   const statusLabel = requestState === "loading" ? "Processing" : result ? "Complete" : "Awaiting detection";
 
   return (
-    <div className="panel overflow-hidden">
-      <div className="border-b border-ink/10 p-5 sm:p-7">
+    <div className="panel overflow-hidden border-ink/15 shadow-[0_22px_65px_rgba(25,49,42,0.11)]">
+      <div className="border-b border-ink/10 bg-ink/[0.018] p-5 sm:p-7">
         <p className="eyebrow">Output 03</p>
         <div className="flex items-center justify-between gap-4">
           <h2 className="section-title">Detection Result</h2>
-          <span className="rounded-full bg-ink/5 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-ink/45">{statusLabel}</span>
+          <span className="shrink-0 rounded-full bg-ink/5 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-ink/60">{statusLabel}</span>
         </div>
       </div>
       <div className="grid gap-px bg-ink/10 sm:grid-cols-2">
@@ -40,14 +40,15 @@ export function ResultsPanel({ imageUrl, result, requestState }: ResultsPanelPro
           ) : (
             <Placeholder text="Results will appear here" />
           )}
+          <BoundingBoxLegend />
         </div>
       </div>
       <div className="p-5 sm:p-7">
         <h3 className="mb-4 text-sm font-bold">Estimated Fruit Count</h3>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           {stats.map(([label, value], index) => (
-            <div key={label} className="rounded-xl border border-ink/10 bg-canvas/60 p-4">
-              <span className="block text-xs text-ink/50">{label}</span>
+            <div key={label} className={`rounded-xl border p-4 ${index === 2 ? "border-citrus/30 bg-orange-50/70" : "border-ink/10 bg-canvas/60"}`}>
+              <span className={`block text-xs ${index === 2 ? "font-semibold text-ink/70" : "text-ink/60"}`}>{label}</span>
               <strong className={`mt-2 block font-mono text-xl sm:text-2xl ${index === 2 ? "text-citrus" : "text-ink"}`}>{value}</strong>
             </div>
           ))}
@@ -64,10 +65,19 @@ function FrameTitle({ title }: { title: string }) {
   return <div className="mb-3 flex items-center gap-2 text-xs font-bold text-ink/60"><ImageIcon size={14} /> {title}</div>;
 }
 
+function BoundingBoxLegend() {
+  return (
+    <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-[11px] font-semibold text-ink/65" aria-label="Bounding box legend">
+      <span className="inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-[#2f7d4a]" aria-hidden="true" />Fruit on Tree</span>
+      <span className="inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-[#ed7a16]" aria-hidden="true" />Fruit on Ground</span>
+    </div>
+  );
+}
+
 function Placeholder({ text, icon }: { text: string; icon?: ReactNode }) {
   return (
     <div className="grid aspect-[4/3] place-items-center overflow-hidden rounded-lg border border-ink/10 bg-[#eef0ea]">
-      <div className="px-4 text-center text-ink/35">
+      <div className="px-4 text-center text-ink/55">
         {icon ?? <ScanLine className="mx-auto mb-3" size={30} strokeWidth={1.5} />}
         <p className="mt-3 text-xs font-medium">{text}</p>
       </div>

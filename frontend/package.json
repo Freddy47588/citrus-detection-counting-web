@@ -1,5 +1,5 @@
 {
-  "name": "citdet-frontend",
+  "name": "kaliscitrus-frontend",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -11,25 +11,24 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "latest",
-    "vite": "latest",
-    "typescript": "latest",
-    "react": "latest",
-    "react-dom": "latest",
+    "@vitejs/plugin-react": "^6.1.1",
+    "vite": "^8.2.2",
+    "typescript": "^6.0.3",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "lucide-react": "^0.468.0"
   },
   "devDependencies": {
-    "@eslint/js": "latest",
-    "@types/react": "latest",
-    "@types/react-dom": "latest",
-    "eslint": "latest",
-    "eslint-plugin-react-hooks": "latest",
-    "eslint-plugin-react-refresh": "latest",
-    "globals": "latest",
+    "@eslint/js": "^10.0.1",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "eslint": "^10.10.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.6",
+    "globals": "^17.12.0",
     "postcss": "^8.4.49",
     "autoprefixer": "^10.4.20",
     "tailwindcss": "^3.4.17",
-    "typescript-eslint": "latest"
+    "typescript-eslint": "^8.69.0"
   }
 }
-

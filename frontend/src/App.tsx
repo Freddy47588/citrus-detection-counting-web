@@ -64,11 +64,11 @@ function App() {
     <div className="min-h-screen bg-canvas text-ink">
       <header className="border-b border-ink/10 bg-canvas/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-8">
-          <a href="#" className="flex items-center gap-3" aria-label="KalisCitrus home">
-            <span className="grid h-10 w-10 place-items-center rounded-xl bg-ink text-white shadow-sm"><ScanLine size={21} aria-hidden="true" /></span>
+          <a href="#" className="flex items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-citrus focus-visible:ring-offset-4" aria-label="KalisCitrus home">
+            <span className="relative grid h-10 w-10 place-items-center rounded-xl border border-white/10 bg-ink text-white shadow-sm"><ScanLine size={21} aria-hidden="true" /><span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-citrus" /></span>
             <span className="text-xl font-bold tracking-tight">KalisCitrus</span>
           </a>
-          <div className="flex items-center gap-2 rounded-full border border-leaf/20 bg-white px-3 py-1.5 text-xs font-semibold text-leaf">
+          <div className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-[12px] font-semibold ${yoloAvailable ? "border-leaf/25 bg-white text-leaf" : "border-amber-200 bg-amber-50 text-amber-900"}`}>
             <span className={`h-2 w-2 rounded-full ${yoloAvailable ? "bg-citrus" : "bg-ink/25"}`} />
             YOLO11s {yoloAvailable ? "ready" : "unavailable"}
           </div>
@@ -78,17 +78,17 @@ function App() {
       <main>
         <section className="relative overflow-hidden border-b border-ink/10">
           <div className="hero-grid absolute inset-0 opacity-50" aria-hidden="true" />
-          <div className="relative mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:py-24">
+          <div className="relative mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-12 lg:py-14">
             <div className="max-w-3xl">
-              <div className="mb-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-leaf"><Activity size={15} aria-hidden="true" /> Computer Vision Research</div>
+              <div className="mb-4 inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.18em] text-leaf"><Activity size={15} aria-hidden="true" /> Computer Vision Research</div>
               <h1 className="text-4xl font-semibold leading-[1.05] tracking-[-0.04em] sm:text-6xl">Citrus Detection <span className="text-citrus">&amp;</span> Counting</h1>
-              <p className="mt-5 max-w-2xl text-lg leading-8 text-ink/65">YOLO11s × D-FINE-S Research Prototype</p>
+              <p className="mt-4 max-w-2xl text-base leading-7 text-ink/70 sm:text-lg">YOLO11s × D-FINE-S Research Prototype</p>
             </div>
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-14">
-          <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+        <section className="mx-auto max-w-7xl px-5 py-8 sm:px-8 sm:py-10">
+          <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
             <div className="space-y-6">
               <div className="panel p-5 sm:p-7">
                 <div className="mb-5">
