@@ -11,31 +11,34 @@ class BoundingBox(BaseModel):
 
 
 class DetectionItem(BaseModel):
-    class_id: int
-    class_name: Literal["Fruit on Ground", "Fruit on Tree"]
+    class_id: Literal[0]
+    class_name: Literal["Citrus Fruit"]
     confidence: float
     bbox: BoundingBox
 
 
-class DetectionCounts(BaseModel):
-    fruit_on_tree: int
-    fruit_on_ground: int
-    total: int
-
-
 class DetectionResponse(BaseModel):
-    model: Literal["YOLO11s"] = "YOLO11s"
+    model: Literal["YOLO11s", "D-FINE-S"] = "YOLO11s"
     image_width: int
     image_height: int
     confidence_threshold: float
     detections: list[DetectionItem]
-    counts: DetectionCounts
+    count: int = Field(ge=0)
     inference_time_ms: float
+
+
+class ComparisonResponse(BaseModel):
+    """Future adapter contract: both predictions must use the same uploaded image."""
+
+    yolo11s: DetectionResponse
+    dfine_s: DetectionResponse
 
 
 class ModelStatus(BaseModel):
     available: bool
     name: str
+    default_confidence: float
+    reason: str | None = None
 
 
 class ModelsResponse(BaseModel):

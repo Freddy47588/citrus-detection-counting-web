@@ -7,10 +7,7 @@ interface DetectionViewerProps {
   detections: DetectionItem[];
 }
 
-const boxStyle = {
-  "Fruit on Tree": { stroke: "#2f7d4a", fill: "#2f7d4a" },
-  "Fruit on Ground": { stroke: "#ed7a16", fill: "#ed7a16" },
-} as const;
+const boxStyle = { stroke: "#2f7d4a", fill: "#2f7d4a" };
 
 export function DetectionViewer({ imageUrl, width, height, detections }: DetectionViewerProps) {
   const strokeWidth = Math.max(width, height) * 0.003;
@@ -22,7 +19,7 @@ export function DetectionViewer({ imageUrl, width, height, detections }: Detecti
       <svg viewBox={`0 0 ${width} ${height}`} className="absolute inset-0 h-full w-full" aria-label={`${detections.length} detected citrus fruit bounding boxes`}>
         {detections.map((detection, index) => {
           const { x1, y1, x2, y2 } = detection.bbox;
-          const color = boxStyle[detection.class_name];
+          const color = boxStyle;
           const label = `${detection.class_name} ${(detection.confidence * 100).toFixed(1)}%`;
           const labelWidth = Math.min(width - x1, label.length * fontSize * 0.58 + fontSize);
           const labelY = Math.max(0, y1 - fontSize * 1.45);

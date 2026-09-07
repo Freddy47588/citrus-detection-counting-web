@@ -3,6 +3,7 @@ from io import BytesIO
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile, status
 from PIL import Image, ImageOps, UnidentifiedImageError
 
+from app.config import get_settings
 from app.schemas.detection import DetectionResponse, ErrorResponse
 from app.services.yolo_detector import (
     InferenceError,
@@ -24,7 +25,7 @@ async def _read_upload(file: UploadFile) -> bytes:
         content.extend(chunk)
         if len(content) > MAX_UPLOAD_BYTES:
             raise HTTPException(
-                status_code=status.HTTP_413_CONTENT_TOO_LARGE,
+                status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
                 detail="Image must be 15 MB or smaller.",
             )
     if not content:
@@ -42,7 +43,7 @@ def _decode_image(content: bytes) -> Image.Image:
                 raise ValueError("Unsupported image format")
             if source.width * source.height > MAX_IMAGE_PIXELS:
                 raise HTTPException(
-                    status_code=status.HTTP_413_CONTENT_TOO_LARGE,
+                    status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
                     detail="Image dimensions are too large to process safely.",
                 )
             source.verify()
@@ -71,7 +72,7 @@ def _decode_image(content: bytes) -> Image.Image:
 )
 async def detect_yolo(
     file: UploadFile = File(...),
-    confidence: float = Form(0.25, ge=0.05, le=0.90),
+    confidence: float | None = Form(None, ge=0.05, le=0.90),
 ) -> DetectionResponse:
     if file.content_type not in ALLOWED_CONTENT_TYPES:
         raise HTTPException(
@@ -86,7 +87,9 @@ async def detect_yolo(
 
     image = _decode_image(content)
     try:
-        return get_yolo_detector().detect(image, confidence)
+        return get_yolo_detector().detect(
+            image, confidence if confidence is not None else get_settings().yolo_default_confidence
+        )
     except ModelUnavailableError as exc:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc)

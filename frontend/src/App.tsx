@@ -19,7 +19,7 @@ function App() {
   useEffect(() => {
     let active = true;
     getModels()
-      .then((payload) => { if (active) setModels(payload); })
+      .then((payload) => { if (active) { setModels(payload); setConfidence(payload.yolo11s.default_confidence); } })
       .catch((error: unknown) => {
         if (active) setMessage(error instanceof Error ? error.message : "Could not load model status.");
       });
@@ -42,7 +42,7 @@ function App() {
     setModel(value);
     setResult(null);
     setRequestState("idle");
-    setMessage(value === "yolo11s" ? null : "D-FINE-S is not available yet.");
+    setMessage(null);
   }
 
   async function handleDetect() {
@@ -81,8 +81,9 @@ function App() {
           <div className="relative mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-12 lg:py-14">
             <div className="max-w-3xl">
               <div className="mb-4 inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.18em] text-leaf"><Activity size={15} aria-hidden="true" /> Computer Vision Research</div>
-              <h1 className="text-4xl font-semibold leading-[1.05] tracking-[-0.04em] sm:text-6xl">Citrus Detection <span className="text-citrus">&amp;</span> Counting</h1>
-              <p className="mt-4 max-w-2xl text-base leading-7 text-ink/70 sm:text-lg">YOLO11s × D-FINE-S Research Prototype</p>
+              <h1 className="text-4xl font-semibold leading-[1.05] tracking-[-0.04em] sm:text-6xl">Citrus Detection <span className="text-citrus">&amp;</span> Counting in Kalisongo</h1>
+              <p className="mt-4 max-w-2xl text-base leading-7 text-ink/70 sm:text-lg">YOLO11s × D-FINE-S Research Demonstration</p>
+              <p className="mt-4 text-sm leading-6 text-ink/60">Dataset: Kalisongo · Object Class: Citrus Fruit · Task: Detection &amp; Counting</p>
             </div>
           </div>
         </section>
@@ -104,7 +105,7 @@ function App() {
                   <p className="eyebrow">Configuration 02</p>
                   <h2 className="section-title">Detection Settings</h2>
                 </div>
-                <ModelSelector value={model} yoloAvailable={yoloAvailable} disabled={isLoading} onChange={handleModelChange} />
+                <ModelSelector value={model} yoloAvailable={yoloAvailable} dfineAvailable={models?.dfine_s.available ?? false} disabled={isLoading} onChange={handleModelChange} />
                 <div className="mt-7 border-t border-ink/10 pt-6">
                   <div className="mb-3 flex items-center justify-between">
                     <label htmlFor="confidence" className="text-sm font-semibold">Confidence Threshold</label>
@@ -115,19 +116,20 @@ function App() {
                     type="range"
                     min="0.05"
                     max="0.9"
-                    step="0.05"
+                    step="0.01"
                     value={confidence}
-                    disabled={isLoading}
+                    disabled={isLoading || !models}
                     onChange={(event) => { setConfidence(Number(event.target.value)); setResult(null); setRequestState("idle"); }}
                     className="slider w-full disabled:cursor-not-allowed disabled:opacity-60"
                     style={{ background: `linear-gradient(to right, #ed7a16 0%, #ed7a16 ${((confidence - 0.05) / 0.85) * 100}%, #e6e5df ${((confidence - 0.05) / 0.85) * 100}%, #e6e5df 100%)` }}
                   />
+                  <p className="mt-3 text-xs leading-5 text-ink/60">Interactive demonstration only. Official evaluation thresholds are selected using the validation set in the research notebooks.</p>
                   <div className="mt-2 flex justify-between text-xs text-ink/45"><span>0.05</span><span>0.90</span></div>
                 </div>
 
                 {message && <p role="alert" className={`mt-5 rounded-lg px-4 py-3 text-sm ${requestState === "error" ? "bg-red-50 text-red-800" : "bg-amber-50 text-amber-900"}`}>{message}</p>}
                 {!message && model === "yolo11s" && models && !yoloAvailable && (
-                  <p role="status" className="mt-5 rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-900">YOLO11s is unavailable. Configure the model weight on the backend.</p>
+                  <p role="status" className="mt-5 rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-900">{models.yolo11s.reason ?? "YOLO11s is not available. Configure the final Kalisongo checkpoint."}</p>
                 )}
 
                 <button type="button" disabled={!canDetect} onClick={handleDetect} className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-ink px-4 py-3.5 text-sm font-bold text-white transition hover:bg-leaf disabled:cursor-not-allowed disabled:bg-ink/10 disabled:text-ink/45">
@@ -144,14 +146,14 @@ function App() {
         <section className="border-y border-ink/10 bg-white">
           <div className="mx-auto grid max-w-7xl gap-8 px-5 py-14 sm:px-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
             <div><p className="eyebrow">Research Demo</p><h2 className="mt-2 text-3xl font-semibold tracking-[-0.03em]">A focused inference visualizer</h2></div>
-            <p className="leading-7 text-ink/65">KalisCitrus visualizes object-detection inference on citrus imagery. Official Precision, Recall, F1, mAP, MAE, and RMSE evaluation remains in a separate controlled research pipeline.</p>
+            <p className="leading-7 text-ink/65">Detection counts shown by KalisCitrus are model predictions. Official model performance metrics are produced through the controlled Kalisongo research evaluation pipeline.</p>
           </div>
         </section>
       </main>
 
       <footer className="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-8 text-xs text-ink/50 sm:flex-row sm:items-center sm:justify-between sm:px-8">
         <span>KalisCitrus — Citrus Detection &amp; Counting</span>
-        <span className="flex items-center gap-2"><GitCompareArrows size={14} /> YOLO11s available · D-FINE-S planned</span>
+        <span className="flex items-center gap-2"><GitCompareArrows size={14} /> YOLO11s {yoloAvailable ? "ready" : "unavailable"} · D-FINE-S planned</span>
       </footer>
     </div>
   );

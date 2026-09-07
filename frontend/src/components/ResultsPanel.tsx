@@ -11,9 +11,7 @@ interface ResultsPanelProps {
 
 export function ResultsPanel({ imageUrl, result, requestState }: ResultsPanelProps) {
   const stats = [
-    ["Fruit on Tree", result?.counts.fruit_on_tree ?? "0"],
-    ["Fruit on Ground", result?.counts.fruit_on_ground ?? "0"],
-    ["Total Detected", result?.counts.total ?? "0"],
+    ["Detected Citrus Fruit", result?.count ?? "–"],
     ["Inference Time", result ? `${result.inference_time_ms.toFixed(2)} ms` : "–"],
     ["Model", result?.model ?? "–"],
     ["Confidence", result ? result.confidence_threshold.toFixed(2) : "–"],
@@ -34,7 +32,7 @@ export function ResultsPanel({ imageUrl, result, requestState }: ResultsPanelPro
         <div className="bg-white p-4">
           <FrameTitle title="Detection Result" />
           {requestState === "loading" ? (
-            <Placeholder icon={<LoaderCircle className="animate-spin" size={30} />} text="Running YOLO11s inference…" />
+            <Placeholder icon={<LoaderCircle className="animate-spin" size={30} />} text="Running model inference…" />
           ) : result && imageUrl ? (
             <DetectionViewer imageUrl={imageUrl} width={result.image_width} height={result.image_height} detections={result.detections} />
           ) : (
@@ -45,16 +43,16 @@ export function ResultsPanel({ imageUrl, result, requestState }: ResultsPanelPro
       </div>
       <div className="p-5 sm:p-7">
         <h3 className="mb-4 text-sm font-bold">Estimated Fruit Count</h3>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3">
           {stats.map(([label, value], index) => (
-            <div key={label} className={`rounded-xl border p-4 ${index === 2 ? "border-citrus/30 bg-orange-50/70" : "border-ink/10 bg-canvas/60"}`}>
-              <span className={`block text-xs ${index === 2 ? "font-semibold text-ink/70" : "text-ink/60"}`}>{label}</span>
-              <strong className={`mt-2 block font-mono text-xl sm:text-2xl ${index === 2 ? "text-citrus" : "text-ink"}`}>{value}</strong>
+            <div key={label} className={`rounded-xl border p-4 ${index === 0 ? "border-citrus/30 bg-orange-50/70" : "border-ink/10 bg-canvas/60"}`}>
+              <span className={`block text-xs ${index === 0 ? "font-semibold text-ink/70" : "text-ink/60"}`}>{label}</span>
+              <strong className={`mt-2 block font-mono text-xl sm:text-2xl ${index === 0 ? "text-citrus" : "text-ink"}`}>{value}</strong>
             </div>
           ))}
         </div>
         {result?.detections.length === 0 && (
-          <p className="mt-4 rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-900">No citrus fruit detected above the selected confidence threshold.</p>
+          <p className="mt-4 rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-900">No Citrus Fruit was detected above the selected confidence threshold.</p>
         )}
       </div>
     </div>
@@ -68,8 +66,7 @@ function FrameTitle({ title }: { title: string }) {
 function BoundingBoxLegend() {
   return (
     <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-[11px] font-semibold text-ink/65" aria-label="Bounding box legend">
-      <span className="inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-[#2f7d4a]" aria-hidden="true" />Fruit on Tree</span>
-      <span className="inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-[#ed7a16]" aria-hidden="true" />Fruit on Ground</span>
+      <span className="inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-[#2f7d4a]" aria-hidden="true" />Citrus Fruit</span>
     </div>
   );
 }

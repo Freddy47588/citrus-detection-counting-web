@@ -8,8 +8,8 @@ settings = get_settings()
 
 app = FastAPI(
     title=settings.app_name,
-    description="YOLO11s image inference API for the KalisCitrus research prototype.",
-    version="0.2.0",
+    description="Citrus Fruit inference demonstration for the Kalisongo research study.",
+    version="0.3.0",
 )
 
 app.add_middleware(

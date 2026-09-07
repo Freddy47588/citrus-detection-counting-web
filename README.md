@@ -1,159 +1,116 @@
-# KalisCitrus — Citrus Detection & Counting
+# KalisCitrus - Citrus Detection & Counting in Kalisongo
 
-> YOLO11s × D-FINE-S Research Prototype
+> YOLO11s x D-FINE-S Research Demonstration
 
-[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.116-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![React](https://img.shields.io/badge/React-Vite-61DAFB?logo=react&logoColor=111827)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-![YOLO11s](https://img.shields.io/badge/YOLO11s-Image_Inference-FF6F00)
-![D-FINE-S](https://img.shields.io/badge/D--FINE--S-Planned-lightgrey)
-![Research Prototype](https://img.shields.io/badge/Status-Research_Prototype-2F7D4A)
+KalisCitrus supports an undergraduate thesis comparing YOLO11s and D-FINE-S for citrus fruit detection and counting on trees in the orchards of Kalisongo Village. This repository is an inference web demonstration, not a training pipeline, annotation application, or official evaluation pipeline.
 
-## 🍊 Project Overview
+## Final research scope
 
-KalisCitrus is a local-first research prototype for detecting and estimating citrus fruit counts in field images. It provides an end-to-end YOLO11s workflow: upload a JPEG or PNG image, run FastAPI inference, receive structured detection JSON, and visualize responsive bounding boxes and category counts in React.
-
-## 🔬 Research Context
-
-KalisCitrus supports the study **“Performance Comparison of YOLO11s and D-FINE-S Models for Citrus Fruit Detection and Counting in Kalisongo Village.”** The current website is a deployment/demo prototype for inference only.
-
-Official Precision, Recall, F1, mAP, MAE, and RMSE results come from a separate controlled evaluation pipeline. This application does not calculate or alter research metrics, datasets, or model weights.
-
-## ✨ Features
-
-- JPEG/PNG upload with client- and server-side validation (maximum 15 MB)
-- Lazy-loaded, cached YOLO11s inference at `imgsz=640`
-- Configurable confidence threshold from `0.05` to `0.90`
-- Original-resolution pixel coordinates in structured JSON
-- Responsive SVG bounding-box overlay with labels and confidence values
-- Estimated Fruit on Tree, Fruit on Ground, and total counts
-- Model availability, loading, empty-result, network, and API error states
-- EXIF orientation handling while preserving the oriented image dimensions
-
-## 🧠 Models
-
-| Capability | Status |
-| --- | --- |
-| YOLO11s image inference | Available |
-| D-FINE-S | Planned / Not Integrated |
-| Compare Models | Planned / Disabled until D-FINE-S is available |
-| Video processing | Planned |
-| Cloud storage | Planned |
-| Kalisongo field model | Planned |
-
-The YOLO11s class mapping is fixed to:
+The final Kalisongo dataset has exactly one class:
 
 ```text
-0 = Fruit on Ground
-1 = Fruit on Tree
+0 = Citrus Fruit
 ```
 
-## 🏗️ Architecture
+Citrus Fruit means fruit still attached to / located on the tree within the research annotation and counting scope. Fruit on Ground is outside the final research scope. CitDet was an earlier pilot/preparation dataset only; its two-class checkpoint must not be used as the final Kalisongo model.
+
+Official Precision, Recall, mAP@0.50, mAP@0.50:0.95, MAE, RMSE, and Mean Count Bias come from separate controlled Kalisongo research notebooks. Web counts are predictions. Neither one uploaded image nor its inference latency establishes model accuracy or an official performance comparison.
+
+## Current model readiness
+
+- **YOLO11s:** inference adapter implemented; available only when the configured local checkpoint exists, loads, has detection task metadata, and declares exactly `0 = Citrus Fruit`. Both dictionary and list representations of that schema are accepted. Invalid schemas fail with a clear configuration error, never a silent relabeling.
+- **D-FINE-S:** unavailable. The service boundary and configuration exist, but the real adapter and final checkpoint are still required. A weight file alone does not enable it.
+- **Compare Models:** disabled until both models are available. Shared response contracts are prepared in Python and TypeScript; comparison inference and the side-by-side result flow remain future integration work. Both adapters must receive the same uploaded image, with each model's threshold displayed. No winner should be selected from one image.
+
+Schema checks cannot establish a checkpoint's training provenance. Supply the verified final Kalisongo YOLO11s weight, not a renamed preparation checkpoint. Restart the backend after replacing weights or changing configuration. Successful loads are cached with separate loading and inference locks; loading is deferred until a status or inference request. The first status check may take longer while loading the checkpoint.
+
+## Stack and architecture
+
+- Frontend: React, Vite, TypeScript, Tailwind CSS, Lucide icons.
+- Backend: Python, FastAPI, Ultralytics YOLO, Pillow, Uvicorn.
+- Tests: pytest and FastAPI TestClient, with mocked inference and no checkpoint requirement.
 
 ```text
-Image upload
-    → React + TypeScript
-    → multipart/form-data
-    → FastAPI validation
-    → cached Ultralytics YOLO11s
-    → detection JSON
-    → SVG overlay + estimated counts
+frontend/src/
+  components/       Upload, model selection, SVG overlay, result cards
+  services/api.ts   Multipart requests and API errors
+  types/detection.ts  Shared detection and future comparison contracts
+backend/app/
+  api/routes/       Health, model readiness, upload validation
+  schemas/          Detection and model status contracts
+  services/         YOLO adapter and unavailable D-FINE-S boundary
+  config.py         Environment settings
 ```
 
-Backend routes, schemas, and inference logic remain separated under `api`, `schemas`, and `services`. The frontend keeps API calls, response types, upload controls, visualization, and summary presentation modular.
+Uploads are limited to JPEG/PNG, 15 MB, and 50 million pixels. Empty, corrupt, and disguised unsupported formats are rejected. EXIF orientation is normalized and images are converted to RGB. Bounding boxes use EXIF-oriented original-image pixel coordinates, not the internal inference size. YOLO inference retains `imgsz=640` and explicitly passes configured `max_det` (default 1000).
 
-## 🛠️ Tech Stack
+## Local installation
 
-- **Frontend:** React, Vite, TypeScript, Tailwind CSS, Lucide
-- **Backend:** Python, FastAPI, Uvicorn, Ultralytics, Pillow
-- **Tests:** Pytest and FastAPI TestClient
-
-## 🚀 Running Locally
-
-Requirements: Python 3.11+ and Node.js 20+.
-
-### Backend
-
-```bash
-cd backend
-python -m venv .venv
-```
-
-Activate the environment:
+Use Python 3.11+ and Node.js 20+.
 
 ```powershell
-# Windows PowerShell
+cd backend
+python -m venv .venv
 .venv\Scripts\Activate.ps1
-```
-
-```bash
-# macOS/Linux
-source .venv/bin/activate
-```
-
-Install dependencies and create local configuration:
-
-```bash
 pip install -r requirements.txt
-cp .env.example .env
+Copy-Item .env.example .env
 ```
 
-On PowerShell, use `Copy-Item .env.example .env` for the final command.
+On macOS/Linux, activate with `source .venv/bin/activate` and copy configuration with `cp .env.example .env`.
 
-Place the local weight at:
+Expected local weights (not committed):
 
 ```text
 backend/models/yolo11s/best.pt
+backend/models/dfine_s/best.pth
 ```
 
-Configure its path in `backend/.env`:
+Configure `backend/.env`:
 
 ```dotenv
 YOLO_MODEL_PATH=models/yolo11s/best.pt
+YOLO_DEFAULT_CONFIDENCE=0.25
+YOLO_MAX_DET=1000
+DFINE_MODEL_PATH=models/dfine_s/best.pth
+DFINE_DEFAULT_CONFIDENCE=0.25
 ```
 
-The path is resolved from the backend directory. It is environment-configured rather than hard-coded. Model files (`*.pt`, `*.pth`, and `*.onnx`) are ignored by Git and must never be committed.
+YOLO relative paths resolve from `backend/`. D-FINE-S path configuration is reserved for the future adapter and should follow the same convention. No absolute Windows path is required. `.env`, `*.pt`, `*.pth`, `*.onnx`, virtual environments, dependency folders, build output, and caches are gitignored.
 
-Start the API from `backend/`:
+Start from `backend/`:
 
-```bash
+```sh
 uvicorn app.main:app --reload
 ```
 
-Useful endpoints:
+In another terminal:
 
-- `GET http://127.0.0.1:8000/api/health`
-- `GET http://127.0.0.1:8000/api/models`
-- `POST http://127.0.0.1:8000/api/detect/yolo`
-- `GET http://127.0.0.1:8000/docs`
-
-### Frontend
-
-```bash
+```sh
 cd frontend
 npm install
-cp .env.example .env
-npm run dev
 ```
 
-On PowerShell, use `Copy-Item .env.example .env`. The development default is:
+Copy `frontend/.env.example` to `frontend/.env` (`Copy-Item` on PowerShell or `cp` on macOS/Linux), then run `npm run dev`. The default frontend is `http://localhost:5173`, with `VITE_API_BASE_URL=http://127.0.0.1:8000`. Backend CORS origins are configured through `FRONTEND_ORIGINS`.
 
-```dotenv
-VITE_API_BASE_URL=http://127.0.0.1:8000
+## Backend API
+
+- `GET /api/health`: API health.
+- `GET /api/models`: actual YOLO readiness, unavailable reasons, and each model's configured demo confidence default. D-FINE-S remains unavailable.
+- `POST /api/detect/yolo`: YOLO inference.
+- `/docs`: interactive API documentation.
+
+Model status example when weights are missing:
+
+```json
+{
+  "yolo11s": {"available": false, "name": "YOLO11s", "default_confidence": 0.25, "reason": "YOLO11s model is unavailable. Configure YOLO_MODEL_PATH with a valid local weight file."},
+  "dfine_s": {"available": false, "name": "D-FINE-S", "default_confidence": 0.25, "reason": "D-FINE-S is not available: its final Kalisongo checkpoint and inference adapter are required."}
+}
 ```
 
-Open `http://localhost:5173`.
+Send multipart form data with `file` and optional `confidence` (range `0.05` to `0.90`). Omission uses `YOLO_DEFAULT_CONFIDENCE`. The frontend initializes its slider from `/api/models`. The slider is for interactive demonstration only; official thresholds are selected using the validation set in the research notebooks, never tuned from web uploads.
 
-## API Contract
-
-Send `multipart/form-data` to `POST /api/detect/yolo`:
-
-- `file`: JPEG or PNG, non-empty, maximum 15 MB
-- `confidence`: optional float, default `0.25`, range `0.05–0.90`
-
-Example response:
+Illustrative response, not a research measurement:
 
 ```json
 {
@@ -161,34 +118,42 @@ Example response:
   "image_width": 1920,
   "image_height": 1080,
   "confidence_threshold": 0.25,
-  "detections": [
-    {
-      "class_id": 1,
-      "class_name": "Fruit on Tree",
-      "confidence": 0.873,
-      "bbox": { "x1": 100.0, "y1": 120.0, "x2": 180.0, "y2": 220.0 }
-    }
-  ],
-  "counts": { "fruit_on_tree": 1, "fruit_on_ground": 0, "total": 1 },
+  "detections": [{
+    "class_id": 0,
+    "class_name": "Citrus Fruit",
+    "confidence": 0.91,
+    "bbox": {"x1": 100, "y1": 120, "x2": 180, "y2": 210}
+  }],
+  "count": 1,
   "inference_time_ms": 42.5
 }
 ```
 
-Coordinates refer to the EXIF-oriented original image dimensions, not the internal `640` inference size.
+`count` equals the number of returned detections. Zero means no Citrus Fruit was detected above the selected threshold, not proof that the image contains no fruit. `model` supports `YOLO11s` and `D-FINE-S` for the future adapter. There are no D-FINE-S or comparison inference endpoints yet.
 
-## 🗺️ Roadmap
+Errors use `detail`: 400 empty upload, 413 size/dimension limit, 415 invalid MIME, 422 invalid image or confidence, 503 unavailable/incompatible model, and 500 inference failure.
 
-- Integrate D-FINE-S inference
-- Enable honest side-by-side comparison after both models are available
-- Add video detection and tracking
-- Add optional compression and cloud storage
-- Add database-backed result history
-- Package and deploy the prototype
+## Validation
 
-## ⚠️ Research Disclaimer
+From `backend/` with the virtual environment activated:
 
-Estimated counts are model predictions, not guaranteed ground-truth measurements. KalisCitrus is a research prototype and must not replace the separate official evaluation pipeline.
+```sh
+python -m pytest
+```
+
+From `frontend/`:
+
+```sh
+npm run lint
+npm run build
+```
+
+Tests cover health, readiness, model schema, configured maximum detections, response counts, confidence defaults/bounds, JPEG/PNG validation, size protections, corrupt/empty uploads, EXIF orientation, and RGB conversion without requiring model weights.
+
+## Research disclaimer
+
+Detection counts shown by KalisCitrus are model predictions. Official model performance metrics are produced through the controlled Kalisongo research evaluation pipeline.
 
 ## License
 
-Released under the [MIT License](LICENSE).
+[MIT License](LICENSE).
